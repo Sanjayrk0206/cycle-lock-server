@@ -9,3 +9,28 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  roll_no      Int    @id
+  name         String @db.VarChar(255)
+  usagehistory Usage_History[]
+}
+
+model Cycle{
+  id           Int    @id @default(autoincrement())
+  model        String @db.VarChar(255)
+  usagehistory Usage_History[]
+}
+
+model Usage_History{
+  id               Int      @id
+  cycle            Cycle    @relation(fields: [cycle_id], references: [id])
+  cycle_id         Int
+  user             User     @relation(fields: [user_roll_no], references: [roll_no])      
+  user_roll_no     Int
+  start_time       DateTime 
+  cycle_dock       CycleDock  @relation(fields: [start_cycle_dock, end_cycle_dock], references[id, id])
+  start_cycle_dock Int
+  end_time         DateTime
+  end_cycle_dock   Int
+}
